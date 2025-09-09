@@ -1,13 +1,15 @@
-import React from "react";
+import React from 'react'
 
-const UserProfile = (props) => {
-  return (
-    <div>
-      <h2>{props.user.name}</h2>
-      <p>Age: {props.user.age}</p>
-      <p>Bio: {props.user.bio}</p>
-    </div>
-  );
-};
+const UserProfile = () => {
+    <UserProfile name="Alice" age="25" bio="Loves hiking and photography" />
+   return (
+     <div>
+       <h2>{props.name}</h2>
+       <p>Age: {props.age}</p>
+       <p>Bio: {props.bio}</p>
+     </div>
+   );
+ };
 
-export default UserProfile;
+
+export default UserProfile
