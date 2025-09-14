@@ -8,10 +8,9 @@ const EditRecipeForm = ({ recipe }) => {
   const updateRecipe = useRecipeStore(state => state.updateRecipe);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
     updateRecipe({ id: recipe.id, title, description });
-    // After updating, navigate back to the recipe details page
     navigate(`/recipes/${recipe.id}`);
   };
 
