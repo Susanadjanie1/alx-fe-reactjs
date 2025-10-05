@@ -1,6 +1,7 @@
+// src/App.jsx
 import React, { useState } from 'react';
-import { Search, Info, Github } from 'lucide-react';
-import Search from './components/Search';
+import { Search as SearchIcon, Info, Github } from 'lucide-react';  // ⬅ Rename the icon to SearchIcon
+import Search from './components/Search';  // ⬅ This is your search component
 import UserProfileCard from './components/UserProfileCard';
 
 // --- About Page Component ---
@@ -31,14 +32,14 @@ const HomePage = ({ navigate }) => {
   return (
     <div className="p-8 rounded-xl bg-white shadow-xl border-t-8 border-indigo-100">
       <h2 className="text-3xl font-extrabold text-gray-800 mb-4 flex items-center">
-        <Search className="w-7 h-7 mr-3 text-indigo-600" />
+        <SearchIcon className="w-7 h-7 mr-3 text-indigo-600" /> {/* ⬅ Use SearchIcon */}
         GitHub User Search
       </h2>
       <p className="text-gray-600 mb-6">
         Welcome! Enter a GitHub username below to retrieve their profile details and statistics.
       </p>
 
-      {/*The SearchFeature now handles API fetching */}
+      {/* The Search Component handles API fetching */}
       <Search />
 
       <div className="mt-8 pt-6 border-t border-gray-100">
@@ -108,7 +109,7 @@ const App = () => {
         </div>
 
         <nav className="flex space-x-4">
-          <NavLink path="/" label="Search" icon={Search} isActive={currentPath === '/'} />
+          <NavLink path="/" label="Search" icon={SearchIcon} isActive={currentPath === '/'} />
           <NavLink path="/about" label="About" icon={Info} isActive={currentPath === '/about'} />
         </nav>
       </div>
@@ -118,13 +119,11 @@ const App = () => {
   return (
     <div className="min-h-screen bg-gray-100 font-sans antialiased">
       <Header />
-
       <main className="container mx-auto p-4 md:p-8 pt-10 flex justify-center">
         <div className="w-full max-w-4xl">
           {renderView()}
         </div>
       </main>
-
       <footer className="w-full py-4 text-center text-xs text-gray-500 border-t mt-12">
         &copy; {new Date().getFullYear()} GitHub Explorer. Powered by the GitHub API.
       </footer>
