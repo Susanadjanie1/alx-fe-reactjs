@@ -2,14 +2,21 @@ import axios from 'axios';
 
 const BASE_URL = 'https://api.github.com';
 
+/**
+ * Fetch single GitHub user by username
+ */
 export const fetchUserData = async (username) => {
+  if (!username) return null;
   const response = await axios.get(`${BASE_URL}/users/${username}`);
   return response.data;
 };
 
-export const fetchAdvancedUsers = async (username, location, minRepos, page = 1) => {
+/**
+ * Advanced search using GitHub Search API
+ * Includes username, location, and minimum repos
+ */
+export const fetchAdvancedUsers = async (username = '', location = '', minRepos = 0, page = 1) => {
   let query = '';
-
   if (username) query += `${username} in:login`;
   if (location) query += ` location:${location}`;
   if (minRepos) query += ` repos:>=${minRepos}`;
@@ -22,7 +29,7 @@ export const fetchAdvancedUsers = async (username, location, minRepos, page = 1)
     }
   });
 
-  // Optional: fetch extra details for each user (location, repos count)
+  // Optional: fetch extra details for each user
   const itemsWithDetails = await Promise.all(
     response.data.items.map(async (user) => {
       const detail = await axios.get(`${BASE_URL}/users/${user.login}`);
