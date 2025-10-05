@@ -1,27 +1,27 @@
 import React, { useState } from 'react';
-import { fetchUserData } from '../services/githubService';  
+import { fetchUserData, fetchAdvancedUsers } from '../services/githubService';
 
 const Search = () => {
   const [username, setUsername] = useState('');
-  const [user, setUser] = useState(null);
+  const [location, setLocation] = useState('');
+  const [minRepos, setMinRepos] = useState('');
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
-    if (!username.trim()) return;
-
     setLoading(true);
     setError(null);
-    setUser(null);
+    setResults([]);
+    setPage(1);
 
     try {
-      const data = await fetchUserData(username);  
-      if (data) {
-        setUser(data);
-      } else {
-        setError("Looks like we cant find the user"); 
-      }
+      const data = await fetchAdvancedUsers(username, location, minRepos, 1);
+      setResults(data.items || []);
+      setHasMore(data.total_count > data.items.length);
     } catch (err) {
       setError("Looks like we cant find the user");
     } finally {
@@ -29,72 +29,101 @@ const Search = () => {
     }
   };
 
+  const loadMore = async () => {
+    const nextPage = page + 1;
+    setLoading(true);
+
+    try {
+      const data = await fetchAdvancedUsers(username, location, minRepos, nextPage);
+      setResults(prev => [...prev, ...data.items]);
+      setPage(nextPage);
+      setHasMore(data.total_count > results.length + data.items.length);
+    } catch {
+      setError("Failed to load more users.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="w-full">
-      {/* Search Input */}
-      <form onSubmit={handleSubmit} className="flex flex-col md:flex-row items-center gap-3 mb-6">
+    <div className="max-w-3xl mx-auto px-4">
+      {/* Advanced Search Form */}
+      <form
+        onSubmit={handleSearch}
+        className="bg-white shadow-md rounded-xl p-6 mb-8 space-y-4 md:space-y-0 md:flex md:flex-wrap md:gap-4"
+      >
         <input
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          placeholder="Enter GitHub username..."
-          className="w-full md:flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          placeholder="Search by username"
+          className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+        />
+        <input
+          type="text"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          placeholder="Location (e.g. Ghana)"
+          className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+        />
+        <input
+          type="number"
+          value={minRepos}
+          onChange={(e) => setMinRepos(e.target.value)}
+          placeholder="Min repos"
+          className="w-40 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
         />
         <button
           type="submit"
-          className="px-5 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-150"
+          className="px-5 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition"
         >
           Search
         </button>
       </form>
 
-      {/* Conditional Rendering */}
-      {loading && (
-        <p className="text-gray-500 text-center">Loading...</p>
-      )}
+      {/* Loading State */}
+      {loading && <p className="text-center text-gray-500">Loading...</p>}
 
-      {error && (
-        <p className="text-red-500 text-center font-medium">{error}</p>
-      )}
+      {/* Error */}
+      {error && <p className="text-center text-red-500 font-medium">{error}</p>}
 
-      {user && (
-        <div className="bg-white p-6 md:p-8 rounded-xl shadow-xl max-w-lg w-full mx-auto mt-6">
-          <div className="flex flex-col md:flex-row items-center space-x-0 md:space-x-6">
-            {/*  Image must be here for the checker */}
+      {/* Results List */}
+      <div className="space-y-4">
+        {results.map(user => (
+          <div
+            key={user.id}
+            className="flex items-center bg-white p-4 rounded-lg shadow hover:shadow-lg transition"
+          >
             <img
-              src={user.avatar_url || 'https://placehold.co/128x128/3B82F6/ffffff?text=No+Avatar'}
-              alt={`${user.login}'s avatar`}
-              className="w-24 h-24 md:w-32 md:h-32 rounded-full ring-4 ring-blue-500 shadow-lg object-cover mb-4 md:mb-0"
-              onError={(e) => e.target.src = 'https://placehold.co/128x128/3B82F6/ffffff?text=No+Avatar'}
+              src={user.avatar_url}
+              alt={`${user.login} avatar`}
+              className="w-16 h-16 rounded-full mr-4 object-cover border-2 border-blue-500"
             />
-
-            <div className="text-center md:text-left">
-              <h2 className="text-3xl font-extrabold text-gray-900 leading-tight">
-                {user.name || user.login}
-              </h2>
-              <p className="text-xl text-blue-600 font-semibold mb-2">
-                @{user.login}
-              </p>
-
-              {user.bio && (
-                <p className="text-gray-600 italic mt-1 max-w-xs">{user.bio}</p>
-              )}
-
-              <div className="flex space-x-4 mt-4 justify-center md:justify-start text-sm text-gray-700 font-medium">
-                <span>Followers: <span className="text-blue-600 font-bold">{user.followers}</span></span>
-                <span>Public Repos: <span className="text-blue-600 font-bold">{user.public_repos}</span></span>
-              </div>
-
+            <div>
+              <h3 className="text-xl font-semibold">{user.login}</h3>
+              {user.location && <p className="text-gray-600">{user.location}</p>}
               <a
                 href={user.html_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block mt-4 px-5 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-150 text-sm"
+                className="text-blue-600 text-sm hover:underline"
               >
-                View GitHub Profile
+                View Profile
               </a>
             </div>
           </div>
+        ))}
+      </div>
+
+      {/* Load More Button */}
+      {hasMore && !loading && (
+        <div className="text-center mt-6">
+          <button
+            onClick={loadMore}
+            className="px-5 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition"
+          >
+            Load More
+          </button>
         </div>
       )}
     </div>

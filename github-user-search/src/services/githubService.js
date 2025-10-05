@@ -1,41 +1,34 @@
-// src/services/githubService.js
 import axios from 'axios';
 
-const GITHUB_TOKEN = import.meta.env.VITE_APP_GITHUB_API_KEY;
-const API_BASE_URL = 'https://api.github.com';
+const BASE_URL = 'https://api.github.com';
 
-const axiosInstance = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    Accept: 'application/vnd.github.v3+json',
-    ...(GITHUB_TOKEN && { Authorization: `token ${GITHUB_TOKEN}` }),
-  },
-});
+export const fetchUserData = async (username) => {
+  const response = await axios.get(`${BASE_URL}/users/${username}`);
+  return response.data;
+};
 
-/**
- * Search GitHub users with advanced filters.
- * @param {Object} params
- * @param {string} params.username - Partial or full username.
- * @param {string} [params.location] - User location filter.
- * @param {number} [params.minRepos] - Minimum public repos.
- */
-export const searchUsers = async ({ username, location, minRepos }) => {
-  if (!username && !location && !minRepos) return [];
-
+export const fetchAdvancedUsers = async (username, location, minRepos, page = 1) => {
   let query = '';
 
   if (username) query += `${username} in:login`;
   if (location) query += ` location:${location}`;
   if (minRepos) query += ` repos:>=${minRepos}`;
 
-  const response = await axiosInstance.get(`/search/users?q=${encodeURIComponent(query)}`);
-  return response.data.items || [];
-};
+  const response = await axios.get(`${BASE_URL}/search/users`, {
+    params: {
+      q: query.trim(),
+      per_page: 10,
+      page
+    }
+  });
 
-/**
- * Fetch single user by username (for profile view)
- */
-export const fetchUserData = async (username) => {
-  const response = await axiosInstance.get(`/users/${username}`);
-  return response.data;
+  // Optional: fetch extra details for each user (location, repos count)
+  const itemsWithDetails = await Promise.all(
+    response.data.items.map(async (user) => {
+      const detail = await axios.get(`${BASE_URL}/users/${user.login}`);
+      return { ...user, ...detail.data };
+    })
+  );
+
+  return { ...response.data, items: itemsWithDetails };
 };
