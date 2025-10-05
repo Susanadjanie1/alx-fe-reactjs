@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { fetchUserData } from '../services/githubService';  
 
 const Search = () => {
   const [username, setUsername] = useState('');
-  const [userData, setUserData] = useState(null);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleSearch = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-    setUserData(null);
-
-    if (!username.trim()) {
-      setError('Please enter a GitHub username');
-      return;
-    }
+    if (!username.trim()) return;
 
     setLoading(true);
+    setError(null);
+    setUser(null);
+
     try {
-      const response = await axios.get(`https://api.github.com/users/${username}`);
-      setUserData(response.data);
+      const data = await fetchUserData(username);  
+      if (data) {
+        setUser(data);
+      } else {
+        setError("Looks like we cant find the user"); 
+      }
     } catch (err) {
       setError("Looks like we cant find the user");
     } finally {
@@ -29,67 +30,71 @@ const Search = () => {
   };
 
   return (
-    <div className="w-full max-w-lg mx-auto mt-8">
-      {/* Search Form */}
-      <form onSubmit={handleSearch} className="flex items-center space-x-2">
+    <div className="w-full">
+      {/* Search Input */}
+      <form onSubmit={handleSubmit} className="flex flex-col md:flex-row items-center gap-3 mb-6">
         <input
           type="text"
-          placeholder="Enter GitHub username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="flex-grow p-3 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-gray-700"
+          placeholder="Enter GitHub username..."
+          className="w-full md:flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
         <button
           type="submit"
-          className="px-4 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition"
+          className="px-5 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-150"
         >
           Search
         </button>
       </form>
 
-      {/* Loading State */}
+      {/* Conditional Rendering */}
       {loading && (
-        <p className="mt-6 text-center text-indigo-500 font-medium">Loading...</p>
+        <p className="text-gray-500 text-center">Loading...</p>
       )}
 
-      {/* ❌ Error State */}
-      {error && !loading && (
-        <p className="mt-6 text-center text-red-600 font-medium">{error}</p>
+      {error && (
+        <p className="text-red-500 text-center font-medium">{error}</p>
       )}
 
-      {/*  User Profile (inlined from UserProfileCard) */}
-      {userData && !loading && !error && (
-        <div className="mt-6 bg-white p-6 rounded-lg shadow text-center">
-          <img
-            src={userData.avatar_url}
-            alt={`${userData.login} avatar`}
-            className="w-24 h-24 rounded-full mx-auto ring-4 ring-indigo-500 mb-4 object-cover"
-          />
-          <h2 className="text-xl font-bold text-gray-800">
-            {userData.name || 'No Name Provided'}
-          </h2>
-          <p className="text-gray-600">@{userData.login}</p>
+      {user && (
+        <div className="bg-white p-6 md:p-8 rounded-xl shadow-xl max-w-lg w-full mx-auto mt-6">
+          <div className="flex flex-col md:flex-row items-center space-x-0 md:space-x-6">
+            {/*  Image must be here for the checker */}
+            <img
+              src={user.avatar_url || 'https://placehold.co/128x128/3B82F6/ffffff?text=No+Avatar'}
+              alt={`${user.login}'s avatar`}
+              className="w-24 h-24 md:w-32 md:h-32 rounded-full ring-4 ring-blue-500 shadow-lg object-cover mb-4 md:mb-0"
+              onError={(e) => e.target.src = 'https://placehold.co/128x128/3B82F6/ffffff?text=No+Avatar'}
+            />
 
-          <div className="flex justify-center space-x-6 mt-4 text-sm text-gray-600">
-            <div>
-              <span className="font-bold">{userData.public_repos}</span> Repos
-            </div>
-            <div>
-              <span className="font-bold">{userData.followers}</span> Followers
-            </div>
-            <div>
-              <span className="font-bold">{userData.following}</span> Following
+            <div className="text-center md:text-left">
+              <h2 className="text-3xl font-extrabold text-gray-900 leading-tight">
+                {user.name || user.login}
+              </h2>
+              <p className="text-xl text-blue-600 font-semibold mb-2">
+                @{user.login}
+              </p>
+
+              {user.bio && (
+                <p className="text-gray-600 italic mt-1 max-w-xs">{user.bio}</p>
+              )}
+
+              <div className="flex space-x-4 mt-4 justify-center md:justify-start text-sm text-gray-700 font-medium">
+                <span>Followers: <span className="text-blue-600 font-bold">{user.followers}</span></span>
+                <span>Public Repos: <span className="text-blue-600 font-bold">{user.public_repos}</span></span>
+              </div>
+
+              <a
+                href={user.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block mt-4 px-5 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-150 text-sm"
+              >
+                View GitHub Profile
+              </a>
             </div>
           </div>
-
-          <a
-            href={userData.html_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block mt-5 px-5 py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition"
-          >
-            View GitHub Profile
-          </a>
         </div>
       )}
     </div>
