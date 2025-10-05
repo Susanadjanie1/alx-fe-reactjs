@@ -1,8 +1,6 @@
-// src/App.jsx
 import React, { useState } from 'react';
-import { Search as SearchIcon, Info, Github } from 'lucide-react';  // ⬅ Rename the icon to SearchIcon
-import Search from './components/Search';  // ⬅ This is your search component
-import UserProfileCard from './components/UserProfileCard';
+import { Search as SearchIcon, Info, Github } from 'lucide-react';  
+import Search from './components/Search';  
 
 // --- About Page Component ---
 const AboutPage = () => (
@@ -32,7 +30,7 @@ const HomePage = ({ navigate }) => {
   return (
     <div className="p-8 rounded-xl bg-white shadow-xl border-t-8 border-indigo-100">
       <h2 className="text-3xl font-extrabold text-gray-800 mb-4 flex items-center">
-        <SearchIcon className="w-7 h-7 mr-3 text-indigo-600" /> {/* ⬅ Use SearchIcon */}
+        <SearchIcon className="w-7 h-7 mr-3 text-indigo-600" />
         GitHub User Search
       </h2>
       <p className="text-gray-600 mb-6">

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { fetchUserData } from '@/services/githubService';
-import UserProfileCard from './UserProfileCard';
+import axios from 'axios';
 
 const Search = () => {
   const [username, setUsername] = useState('');
@@ -14,16 +13,16 @@ const Search = () => {
     setUserData(null);
 
     if (!username.trim()) {
-      setError('Please enter a username');
+      setError('Please enter a GitHub username');
       return;
     }
 
     setLoading(true);
     try {
-      const data = await fetchUserData(username.trim());
-      setUserData(data);
+      const response = await axios.get(`https://api.github.com/users/${username}`);
+      setUserData(response.data);
     } catch (err) {
-      setError("Looks like we can't find the user");
+      setError("Looks like we cant find the user");
     } finally {
       setLoading(false);
     }
@@ -53,13 +52,46 @@ const Search = () => {
         <p className="mt-6 text-center text-indigo-500 font-medium">Loading...</p>
       )}
 
-      {/* Error State */}
+      {/* ❌ Error State */}
       {error && !loading && (
         <p className="mt-6 text-center text-red-600 font-medium">{error}</p>
       )}
 
-      {/* User Data */}
-      {userData && !loading && <UserProfileCard user={userData} />}
+      {/*  User Profile (inlined from UserProfileCard) */}
+      {userData && !loading && !error && (
+        <div className="mt-6 bg-white p-6 rounded-lg shadow text-center">
+          <img
+            src={userData.avatar_url}
+            alt={`${userData.login} avatar`}
+            className="w-24 h-24 rounded-full mx-auto ring-4 ring-indigo-500 mb-4 object-cover"
+          />
+          <h2 className="text-xl font-bold text-gray-800">
+            {userData.name || 'No Name Provided'}
+          </h2>
+          <p className="text-gray-600">@{userData.login}</p>
+
+          <div className="flex justify-center space-x-6 mt-4 text-sm text-gray-600">
+            <div>
+              <span className="font-bold">{userData.public_repos}</span> Repos
+            </div>
+            <div>
+              <span className="font-bold">{userData.followers}</span> Followers
+            </div>
+            <div>
+              <span className="font-bold">{userData.following}</span> Following
+            </div>
+          </div>
+
+          <a
+            href={userData.html_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block mt-5 px-5 py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition"
+          >
+            View GitHub Profile
+          </a>
+        </div>
+      )}
     </div>
   );
 };
