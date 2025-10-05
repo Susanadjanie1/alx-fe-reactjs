@@ -30,8 +30,7 @@ const HomePage = ({ navigate }) => {
   return (
     <div className="p-8 rounded-xl bg-white shadow-xl border-t-8 border-indigo-100">
       <h2 className="text-3xl font-extrabold text-gray-800 mb-4 flex items-center">
-        <SearchIcon className="w-7 h-7 mr-3 text-indigo-600" />
-        GitHub User Search
+        User Search
       </h2>
       <p className="text-gray-600 mb-6">
         Welcome! Enter a GitHub username below to retrieve their profile details and statistics.
@@ -107,7 +106,6 @@ const App = () => {
         </div>
 
         <nav className="flex space-x-4">
-          <NavLink path="/" label="Search" icon={SearchIcon} isActive={currentPath === '/'} />
           <NavLink path="/about" label="About" icon={Info} isActive={currentPath === '/about'} />
         </nav>
       </div>
@@ -123,7 +121,7 @@ const App = () => {
         </div>
       </main>
       <footer className="w-full py-4 text-center text-xs text-gray-500 border-t mt-12">
-        &copy; {new Date().getFullYear()} GitHub Explorer. Powered by the GitHub API.
+        &copy; {new Date().getFullYear()} GitHub Explorer. Powered by the GitHub API. Developed by Susana Djanie.
       </footer>
     </div>
   );

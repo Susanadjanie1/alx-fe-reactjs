@@ -1,25 +1,18 @@
 import React, { useState } from 'react';
 
-// --- START: Service Logic (Internalized fetchUserData) ---
+const url = `${API_BASE_URL}/users/${username}`;
 
-// API_BASE_URL remains constant
-const API_BASE_URL = 'https://api.github.com/users';
 
-/**
- * Fetches user data from the GitHub API based on the provided username.
- */
+// Fetches user data from the GitHub API based on the provided username.
+ 
 const fetchUserData = async (username) => {
-    // FIX: Changing to process.env access, which is often a compatible fallback 
-    // for environment variable substitution in older JS targets where import.meta.env causes warnings.
+   
     const GITHUB_TOKEN = process.env.VITE_APP_GITHUB_API_KEY; 
 
     if (!username) return null;
     
     const url = `${API_BASE_URL}/${username}`;
     
-    const headers = {
-        'Accept': 'application/vnd.github.v3+json',
-    };
 
     // Use token for authenticated requests if available
     if (GITHUB_TOKEN) {
@@ -30,11 +23,10 @@ const fetchUserData = async (username) => {
         const response = await fetch(url, { headers });
 
         if (response.status === 404) {
-            return null; // User not found
+            return null; 
         }
 
         if (!response.ok) {
-            // General API error (e.g., rate limit, server error)
             const errorData = await response.json();
             throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
         }
@@ -47,13 +39,10 @@ const fetchUserData = async (username) => {
     }
 };
 
-// --- END: Service Logic ---
 
-// --- START: UserProfileCard Component (Internalized) ---
 
-/**
- * Displays the key details of a GitHub user.
- */
+//  Displays the key details of a GitHub user.
+ 
 const UserProfileCard = ({ user }) => {
     if (!user) return null;
 
@@ -65,7 +54,6 @@ const UserProfileCard = ({ user }) => {
                     src={user.avatar_url || 'https://placehold.co/128x128/3B82F6/ffffff?text=No+Avatar'} 
                     alt={`${user.login}'s avatar`} 
                     className="w-24 h-24 md:w-32 md:h-32 rounded-full ring-4 ring-blue-500 shadow-lg object-cover mb-4 md:mb-0"
-                    // Placeholder fallback if avatar URL fails
                     onError={(e) => e.target.src = 'https://placehold.co/128x128/3B82F6/ffffff?text=No+Avatar'}
                 />
                 
@@ -112,11 +100,8 @@ const UserProfileCard = ({ user }) => {
     );
 };
 
-// --- END: UserProfileCard Component ---
+//  UserSearch functionality.
 
-/**
- * The main application component, acting as both the router/layout and the UserSearch functionality.
- */
 const App = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [userData, setUserData] = useState(null);
