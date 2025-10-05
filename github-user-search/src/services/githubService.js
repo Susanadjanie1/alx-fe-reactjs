@@ -21,13 +21,10 @@ export const fetchAdvancedUsers = async (username = '', location = '', minRepos 
   if (location) query += ` location:${location}`;
   if (minRepos) query += ` repos:>=${minRepos}`;
 
-  const response = await axios.get(`${BASE_URL}/search/users`, {
-    params: {
-      q: query.trim(),
-      per_page: 10,
-      page
-    }
-  });
+  
+  const url = `${BASE_URL}/search/users?q=${encodeURIComponent(query.trim())}&per_page=10&page=${page}`;
+
+  const response = await axios.get(url);
 
   // Optional: fetch extra details for each user
   const itemsWithDetails = await Promise.all(
