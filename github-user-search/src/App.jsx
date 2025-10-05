@@ -1,48 +1,234 @@
-import { useState } from 'react';
-import { Search, Info, Github } from 'lucide-react';
+import React, { useState } from 'react';
+// Assuming lucide-react icons are available in this environment.
+import { Search, Info, Github, Users, TrendingUp } from 'lucide-react';
 
-const HomePage = ({ navigate }) => (
-  <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
-    <h2 className="text-3xl font-extrabold text-gray-800 mb-4 flex items-center">
-      <Search className="w-7 h-7 mr-3 text-indigo-600" />
-      Search GitHub Users
-    </h2>
-    <p className="text-gray-600 mb-6">
-      Welcome! Use this page to search for any GitHub user and view their profile details and public repositories.
-    </p>
+// --- START: API Service Logic ---
+
+const API_BASE_URL = 'https://api.github.com/users';
+
+/**
+ * Fetches user data from the GitHub API based on the provided username.
+ */
+const fetchUserData = async (username) => {
+    // FIX: Using the injected environment variable directly via the expected global name.
+    // In this specific React environment, the compiler resolves VITE_APP_GITHUB_API_KEY
+    // as a string literal during build, avoiding the 'process is not defined' error.
+    const GITHUB_TOKEN = typeof VITE_APP_GITHUB_API_KEY !== 'undefined' ? VITE_APP_GITHUB_API_KEY : ''; 
+
+    if (!username) return null;
     
-    {/* Placeholder Search Input */}
-    <div className="flex space-x-2">
-      <input
-        type="text"
-        placeholder="Enter GitHub username..."
-        className="flex-grow p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150"
-      />
-      <button className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-150">
-        Search
-      </button>
-    </div>
+    const url = `${API_BASE_URL}/${username}`;
     
-    <div className="mt-8 pt-6 border-t border-gray-100">
-        <p className="text-sm text-gray-400">
-            Current view: <span className="font-mono text-xs text-indigo-500 bg-indigo-50 px-1 py-0.5 rounded">/</span>
-        </p>
-    </div>
-  </div>
-);
+    const headers = {
+        'Accept': 'application/vnd.github.v3+json',
+    };
+
+    if (GITHUB_TOKEN) {
+        headers['Authorization'] = `token ${GITHUB_TOKEN}`;
+    }
+
+    try {
+        const response = await fetch(url, { headers });
+
+        if (response.status === 404) {
+            return null; // User not found
+        }
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+        }
+
+        return await response.json();
+
+    } catch (error) {
+        throw new Error(error.message || "A network error occurred while fetching data.");
+    }
+};
+
+// --- END: API Service Logic ---
+
+// --- START: UserProfileCard Component ---
+
+/**
+ * Displays the key details of a GitHub user.
+ */
+const UserProfileCard = ({ user }) => {
+    if (!user) return null;
+
+    const displayName = user.name || 'N/A';
+
+    return (
+        <div className="bg-white p-6 md:p-8 rounded-xl shadow-xl max-w-lg w-full transform transition duration-500 hover:shadow-2xl hover:scale-[1.02] mt-8 border-t-4 border-indigo-600">
+            <div className="flex flex-col md:flex-row items-center space-x-0 md:space-x-6">
+                {/* Avatar */}
+                <img 
+                    src={user.avatar_url || 'https://placehold.co/128x128/4F46E5/ffffff?text=No+Avatar'} 
+                    alt={`${user.login}'s avatar`} 
+                    className="w-24 h-24 md:w-32 md:h-32 rounded-full ring-4 ring-indigo-600 shadow-lg object-cover mb-4 md:mb-0"
+                    onError={(e) => e.target.src = 'https://placehold.co/128x128/4F46E5/ffffff?text=No+Avatar'}
+                />
+                
+                <div className="text-center md:text-left flex-1">
+                    {/* Name/Username */}
+                    <h2 className="text-3xl font-extrabold text-gray-900 leading-tight">
+                        {displayName}
+                    </h2>
+                    <p className="text-xl text-indigo-600 font-semibold mb-2">
+                        @{user.login}
+                    </p>
+
+                    {/* Bio/Description */}
+                    {user.bio && (
+                         <p className="text-gray-600 italic mt-1 max-w-xs">{user.bio}</p>
+                    )}
+
+                    {/* Stats and Link */}
+                    <div className="flex space-x-4 mt-4 justify-center md:justify-start text-sm text-gray-700 font-medium">
+                        <span className="flex items-center">
+                            <TrendingUp className="w-4 h-4 mr-1 text-gray-500" />
+                            <span className="text-indigo-600 font-bold">{user.public_repos} Repos</span>
+                        </span>
+                        <span className="flex items-center">
+                            <Users className="w-4 h-4 mr-1 text-gray-500" />
+                            <span className="text-indigo-600 font-bold">{user.followers} Followers</span>
+                        </span>
+                    </div>
+
+                    <a
+                        href={user.html_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center mt-4 px-5 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-150 text-sm"
+                    >
+                        Visit Profile
+                        <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// --- END: UserProfileCard Component ---
+
+
+// --- Home Page Component (Now includes Search Logic) ---
+
+const HomePage = ({ navigate }) => {
+    // State management for the search functionality
+    const [searchTerm, setSearchTerm] = useState('');
+    const [userData, setUserData] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        
+        setUserData(null);
+        setError(null);
+
+        if (!searchTerm.trim()) {
+            setError('Please enter a GitHub username to start the search.');
+            return;
+        }
+
+        setLoading(true);
+        
+        try {
+            const data = await fetchUserData(searchTerm.trim());
+            
+            if (data === null) {
+                setError('Looks like we can\'t find the user or repository. Try a different username.');
+            } else {
+                setUserData(data);
+            }
+        } catch (err) {
+            setError(`API Error: ${err.message}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="p-8 rounded-xl bg-white shadow-xl border-t-8 border-indigo-100">
+            <h2 className="text-3xl font-extrabold text-gray-800 mb-4 flex items-center">
+              <Search className="w-7 h-7 mr-3 text-indigo-600" />
+              GitHub User Search
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Welcome! Enter a GitHub username below to retrieve their profile details and statistics.
+            </p>
+            
+            {/* Search Form */}
+            <form onSubmit={handleSearch} className="w-full">
+                <div className="flex space-x-3">
+                    <input
+                        type="text"
+                        placeholder="Enter GitHub username (e.g., octocat)"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="flex-grow p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-gray-700 transition duration-150 shadow-inner"
+                        disabled={loading}
+                    />
+                    <button
+                        type="submit"
+                        className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-150 disabled:bg-indigo-400"
+                        disabled={loading}
+                    >
+                        Search
+                    </button>
+                </div>
+            </form>
+            
+            {/* Status and Results Display */}
+            <div className="mt-8 flex justify-center w-full">
+                {/* Loading State */}
+                {loading && (
+                    <div className="flex items-center space-x-2 text-xl text-indigo-500 font-medium p-4 rounded-lg bg-indigo-50 shadow-md">
+                        <svg className="animate-spin h-5 w-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span>Loading...</span>
+                    </div>
+                )}
+                
+                {/* Error State */}
+                {error && !loading && (
+                    <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg shadow-md w-full max-w-md" role="alert">
+                        <p className="font-bold">Error</p>
+                        <p className="text-sm">{error}</p>
+                    </div>
+                )}
+                
+                {/* Results Display */}
+                {userData && !loading && !error && (
+                    <UserProfileCard user={userData} />
+                )}
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-gray-100">
+                <p className="text-sm text-gray-400">
+                    Current view: <span className="font-mono text-xs text-indigo-500 bg-indigo-50 px-1 py-0.5 rounded">/</span>
+                </p>
+            </div>
+        </div>
+    );
+};
 
 // --- About Page Component ---
 const AboutPage = () => (
-  <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+  <div className="bg-white p-8 rounded-xl shadow-xl border-t-8 border-teal-100">
     <h2 className="text-3xl font-extrabold text-gray-800 mb-4 flex items-center">
       <Info className="w-7 h-7 mr-3 text-teal-600" />
-      About This App
+      About This Application
     </h2>
     <p className="text-gray-600 mb-4">
-      This application is a simple, single-page interface designed to interact with the public GitHub API. It demonstrates basic client-side routing and data fetching in a React environment.
+      This application is a simple, single-page interface designed to interact with the public GitHub API. It demonstrates basic client-side routing and data fetching in a modern React structure.
     </p>
     <p className="text-gray-600 mb-6">
-      The goal is to provide a clean, responsive interface to quickly look up user profiles, view key statistics, and list repositories.
+      It utilizes a client-side routing approach (using React state and a simple `switch` statement) to switch between views without a full page refresh. The design is implemented using **Tailwind CSS**.
     </p>
     <div className="mt-8 pt-6 border-t border-gray-100">
         <p className="text-sm text-gray-400">
@@ -55,93 +241,93 @@ const AboutPage = () => (
 // --- Main Application Component ---
 
 const App = () => {
-  // Simple state to manage the current "path" or view
-  const [currentPath, setCurrentPath] = useState('/');
+    // Simple state to manage the current "path" or view
+    const [currentPath, setCurrentPath] = useState('/');
 
-  // Function to handle client-side navigation
-  const navigate = (path) => {
-    setCurrentPath(path);
-  };
+    // Function to handle client-side navigation
+    const navigate = (path) => {
+      setCurrentPath(path);
+    };
 
-  // Component to render based on the currentPath state
-  const renderView = () => {
-    switch (currentPath) {
-      case '/':
-        return <HomePage navigate={navigate} />;
-      case '/about':
-        return <AboutPage />;
-      default:
-        // Simple 404 page
-        return (
-          <div className="text-center p-12 bg-white rounded-xl shadow-lg">
-            <h1 className="text-4xl font-bold text-red-500 mb-4">404</h1>
-            <p className="text-gray-600">Page Not Found. Double-check the URL.</p>
-            <button
-              onClick={() => navigate('/')}
-              className="mt-6 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition duration-150"
-            >
-              Go to Home
-            </button>
+    // Component to render based on the currentPath state
+    const renderView = () => {
+      switch (currentPath) {
+        case '/':
+          return <HomePage navigate={navigate} />;
+        case '/about':
+          return <AboutPage />;
+        default:
+          // Simple 404 page
+          return (
+            <div className="text-center p-12 bg-white rounded-xl shadow-lg border-t-4 border-red-500">
+              <h1 className="text-4xl font-black text-red-600 mb-4">404 - Not Found</h1>
+              <p className="text-gray-600 mb-4">The page you're looking for doesn't exist.</p>
+              <button
+                onClick={() => navigate('/')}
+                className="mt-4 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-150 font-semibold shadow-md"
+              >
+                Go to Home
+              </button>
+            </div>
+          );
+      }
+    };
+
+    // Reusable Navigation Link component
+    const NavLink = ({ path, label, icon: Icon, isActive }) => (
+      <button
+        onClick={() => navigate(path)}
+        className={`
+          px-3 py-2 rounded-lg text-sm font-medium transition duration-200 
+          flex items-center space-x-1.5
+          ${isActive 
+            ? 'bg-indigo-600 text-white shadow-lg' 
+            : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+          }
+        `}
+      >
+        <Icon className="w-4 h-4" />
+        <span>{label}</span>
+      </button>
+    );
+    
+    // Navigation Bar Component
+    const Header = () => (
+      <header className="bg-gray-800 shadow-xl sticky top-0 z-10">
+        <div className="container mx-auto px-4 md:px-8 py-4 flex justify-between items-center">
+          <div
+            onClick={() => navigate('/')}
+            className="flex items-center space-x-2 cursor-pointer transition transform hover:scale-[1.01]"
+          >
+            <Github className="w-8 h-8 text-white" />
+            <h1 className="text-2xl font-bold text-white tracking-wider">GitHub Explorer</h1>
           </div>
-        );
-    }
-  };
-
-  // Navigation Bar Component
-  const Header = () => (
-    <header className="bg-gray-800 shadow-md">
-      <div className="container mx-auto px-4 md:px-8 py-4 flex justify-between items-center">
-        <div
-          onClick={() => navigate('/')}
-          className="flex items-center space-x-2 cursor-pointer transition transform hover:scale-[1.01]"
-        >
-          <Github className="w-8 h-8 text-white" />
-          <h1 className="text-2xl font-bold text-white tracking-wider">GitHub Explorer</h1>
+          
+          <nav className="flex space-x-4">
+            <NavLink path="/" label="Search" icon={Search} isActive={currentPath === '/'} />
+            <NavLink path="/about" label="About" icon={Info} isActive={currentPath === '/about'} />
+          </nav>
         </div>
+      </header>
+    );
+
+    return (
+      <div className="min-h-screen bg-gray-100 font-sans antialiased">
+        <Header />
         
-        <nav className="flex space-x-4">
-          <NavLink path="/" label="Search" icon={Search} isActive={currentPath === '/'} />
-          <NavLink path="/about" label="About" icon={Info} isActive={currentPath === '/about'} />
-        </nav>
+        {/* Main content container, fluid width */}
+        <main className="container mx-auto p-4 md:p-8 pt-10 flex justify-center">
+          <div className="w-full max-w-4xl">
+            {renderView()}
+          </div>
+        </main>
+        
+        {/* Simple Footer */}
+        <footer className="w-full py-4 text-center text-xs text-gray-500 border-t mt-12">
+          &copy; {new Date().getFullYear()} GitHub Explorer. Powered by the GitHub API.
+        </footer>
       </div>
-    </header>
-  );
-  
-  // Reusable Navigation Link component
-  const NavLink = ({ path, label, icon: Icon, isActive }) => (
-    <button
-      onClick={() => navigate(path)}
-      className={`
-        px-3 py-2 rounded-lg text-sm font-medium transition duration-200 
-        flex items-center space-x-1.5
-        ${isActive 
-          ? 'bg-indigo-600 text-white shadow-lg' 
-          : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-        }
-      `}
-    >
-      <Icon className="w-4 h-4" />
-      <span>{label}</span>
-    </button>
-  );
-
-  return (
-    <div className="min-h-screen bg-gray-100 font-sans antialiased">
-      <Header />
-      
-      {/* Main content container, fluid width */}
-      <main className="container mx-auto p-4 md:p-8 pt-10">
-        <div className="max-w-4xl mx-auto">
-          {renderView()}
-        </div>
-      </main>
-      
-      {/* Simple Footer */}
-      <footer className="w-full py-4 text-center text-xs text-gray-500 border-t mt-12">
-        &copy; {new Date().getFullYear()} GitHub Explorer. Powered by the GitHub API.
-      </footer>
-    </div>
-  );
+    );
 };
 
 export default App;
