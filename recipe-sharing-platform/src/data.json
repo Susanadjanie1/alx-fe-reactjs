@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "title": "Ghanaian Jollof Rice",
+    "summary": "A rich, flavorful one-pot rice dish cooked in a spicy tomato-based stew with aromatic spices, often served with chicken or beef.",
+    "image": "/images/masad-jollof.jpg"
+  },
+  {
+    "id": 2,
+    "title": "Fufu and Light Soup",
+    "summary": "Soft, pounded cassava and plantain (Fufu) served with a light, spicy, tomato-based broth (Light Soup) and your choice of meat or fish.",
+    "image": "/images/fufu-goat.jpg"
+  },
+  {
+    "id": 3,
+    "title": "Waakye",
+    "summary": "A beloved street food made from rice and black-eyed peas, cooked together with sorghum leaves to give it a distinct reddish-brown colour.",
+    "image": "/images/waakye.jpeg"
+  },
+  {
+    "id": 4,
+    "title": "Red Red (Beans and Plantain)",
+    "summary": "Stewed black-eyed peas cooked in palm oil, tomato, and spices, served hot with crispy fried ripe plantain slices (Kelewele).",
+    "image": "/images/gob3.jpeg"
+  },
+  {
+    "id": 5,
+    "title": "Groundnut Soup",
+    "summary": "A thick, creamy, and savory soup made from ground peanuts, tomatoes, onions, and various spices, commonly paired with Omo Tuo or Fufu.",
+    "image": "/images/Groundnut-soup.jpg"
+  },
+  {
+    "id": 6,
+    "title": "Banku and Tilapia",
+    "summary": "Fermented corn and cassava dough (Banku) formed into balls, typically served with grilled Tilapia fish and a spicy blended pepper sauce (Shito).",
+    "image": "/images/banku and tilapia.jpg"
+  },
+  {
+    "id": 7,
+    "title": "Kontomire Stew (Palava Sauce)",
+    "summary": "A richly flavored stew made from Taro leaves (kontomire), palm oil, smoked fish, and boiled eggs, often eaten with boiled yams or rice.",
+    "image": "/images/kontomire stew.jpg"
+  },
+  {
+    "id": 8,
+    "title": "Kenkey (Ga/Fante)",
+    "summary": "Solid balls of fermented corn dough, steamed and wrapped in corn husks or plantain leaves, typically served with Shito (hot sauce) and fried fish.",
+    "image": "/images/kenkey.jpg"
+  }
+]
