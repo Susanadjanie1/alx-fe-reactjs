@@ -43,7 +43,8 @@ const AddRecipeForm = () => {
 
     // Handle input changes, clearing errors as user types
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const { name} = e.target;
+        const value = e.target.value; 
         setFormData(prev => ({ ...prev, [name]: value }));
         
         if (errors[name]) {
