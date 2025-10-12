@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import mockRecipes from "../data.json";
+import { Link } from "react-router-dom";
 import { FaUtensils } from "react-icons/fa";
+import mockRecipes from "../data.json";
 
 const HomePage = () => {
   const [recipes, setRecipes] = useState([]);
@@ -23,7 +24,7 @@ const HomePage = () => {
 
   return (
     <div className="container mx-auto p-4 sm:p-6 lg:p-10">
-      {/* Page Heading - Updated Classes */}
+      {/* Main Page Heading */}
       <h1
         className="text-4xl font-extrabold text-gray-800 mb-10 text-center 
                    flex items-center justify-center space-x-3"
@@ -32,12 +33,14 @@ const HomePage = () => {
         <span>Explore Delicious Ghanaian Recipes</span>
       </h1>
 
+      {/* Responsive Grid for Recipe Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {recipes.map((recipe) => (
-          <div
+          <Link
             key={recipe.id}
+            to={`/recipe/${recipe.id}`}
             className="bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 ease-in-out 
-                                   hover:shadow-2xl hover:scale-105 border border-gray-100 cursor-pointer"
+                       hover:shadow-2xl hover:scale-105 border border-gray-100 cursor-pointer block"
           >
             {/* Recipe Image */}
             <img
@@ -58,16 +61,15 @@ const HomePage = () => {
                 {recipe.summary}
               </p>
 
-              {/* Detail Link/Button */}
-              <a
-                href={`/recipe/${recipe.id}`}
+              {/* View Recipe Button */}
+              <div
                 className="inline-block w-full text-center px-4 py-2 bg-red-600 text-white font-medium text-base rounded-lg 
-                                           hover:bg-red-700 transition duration-50"
+                               hover:bg-red-700 transition duration-50"
               >
                 View Recipe
-              </a>
+              </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
