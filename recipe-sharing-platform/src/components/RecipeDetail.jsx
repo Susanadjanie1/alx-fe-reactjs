@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import mockRecipes from '../data.json'; 
-import { FaCarrot, FaUtensils } from 'react-icons/fa';
+import { FaCarrot, FaUtensils } from 'react-icons/fa'; 
 
 const RecipeDetail = () => {
     const { id } = useParams(); 
@@ -26,7 +26,6 @@ const RecipeDetail = () => {
         return (
             <div className="text-center p-10">
                 <h2 className="text-3xl font-bold text-red-600 mb-4">Recipe Not Found</h2>
-                <p className="text-gray-600">The requested recipe does not exist.</p>
                 <Link to="/" className="text-indigo-600 hover:text-indigo-800 mt-4 inline-block">
                     Go back to Home
                 </Link>
@@ -34,7 +33,7 @@ const RecipeDetail = () => {
         );
     }
 
-   
+    // Split multi-line strings from data.json into arrays for list display
     const ingredientsList = recipe.ingredients ? recipe.ingredients.split('\n').filter(item => item.trim() !== '') : [];
     const stepsList = recipe.steps ? recipe.steps.split('\n').filter(item => item.trim() !== '') : [];
 
@@ -43,13 +42,14 @@ const RecipeDetail = () => {
             
             {/* Back Button */}
             <Link to="/" className="text-indigo-600 hover:text-indigo-800 text-lg mb-6 inline-flex items-center">
-                {/* <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> */}
+                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Back to all Recipes
             </Link>
 
-            {/* Recipe Header and Image */}
+            {/* Recipe Header and Image Container */}
             <div className="bg-white rounded-xl shadow-2xl overflow-hidden mb-10">
                 <img 
+                    // Adjusted classes for object-contain to prevent cropping
                     className="w-full h-96 object-contain object-center" 
                     src={recipe.image} 
                     alt={recipe.title} 
@@ -61,17 +61,19 @@ const RecipeDetail = () => {
                 </div>
             </div>
 
-            {/* Content Grid (Responsive layout for ingredients and steps) */}
+            {/* Content Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                 
-                {/* Ingredients Section (1/3 width on desktop) */}
+                {/* Ingredients Section */}
                 <div className="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                    <h2 className="text-3xl font-bold text-gray-800 mb-4 border-b pb-2"><FaCarrot className="ml-3 text-orange-500" />Ingredients </h2>
+                    <h2 className="text-3xl font-bold text-gray-800 mb-4 border-b pb-2 flex items-center">
+                        <FaCarrot className="mr-2 text-orange-500" />
+                        Ingredients 
+                    </h2>
                     <ul className="space-y-3 text-lg text-gray-700">
                         {ingredientsList.length > 0 ? (
                             ingredientsList.map((item, index) => (
                                 <li key={index} className="flex items-start">
-                                    {/* <svg className="flex-shrink-0 w-6 h-6 mr-2 text-indigo-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg> */}
                                     {item.trim()}
                                 </li>
                             ))
@@ -81,9 +83,12 @@ const RecipeDetail = () => {
                     </ul>
                 </div>
 
-                {/* Preparation Steps Section (2/3 width on desktop) */}
+                {/* Preparation Steps Section (Includes the 'instructions' keyword) */}
                 <div className="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                    <h2 className="text-3xl font-bold text-gray-800 mb-4 border-b pb-2"><FaUtensils className="ml-1 text-red-600" />Preparation Steps </h2>
+                    <h2 className="text-3xl font-bold text-gray-800 mb-4 border-b pb-2 flex items-center">
+                        <FaUtensils className="mr-2 text-red-600" />
+                        Preparation Steps (Instructions) 
+                    </h2>
                     <ol className="space-y-6 text-lg text-gray-700">
                         {stepsList.length > 0 ? (
                             stepsList.map((step, index) => (
