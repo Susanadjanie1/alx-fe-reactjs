@@ -3,48 +3,64 @@
     "id": 1,
     "title": "Ghanaian Jollof Rice",
     "summary": "A rich, flavorful one-pot rice dish cooked in a spicy tomato-based stew with aromatic spices, often served with chicken or beef.",
-    "image": "/images/masad-jollof.jpg"
+    "image": "/images/masad-jollof.jpg",
+    "ingredients": "1.5 cups Parboiled Rice\n1 large onion, diced\n1/2 cup tomato paste\n3 large tomatoes, blended\n2 Scotch Bonnet peppers, blended\n1 thumb ginger, blended\n1 tsp Curry Powder\n1 tsp Dried Thyme\n1 Bay Leaf\n2 cups Chicken Stock\nSalt to taste\nVegetable oil for frying",
+    "steps": "1. Prepare the stock and blend the tomato-pepper-ginger mixture.\n2. Sauté half of the diced onions in hot oil until translucent. Add tomato paste and fry for 5 minutes.\n3. Add the blended mixture and seasonings (curry, thyme, bay leaf, salt). Simmer for 15 minutes to create the stew base.\n4. Add the chicken stock and bring to a boil. Remove the bay leaf.\n5. Add the washed rice and stir well to combine with the sauce. Ensure the liquid level is correct.\n6. Cover tightly with foil and a lid. Reduce heat to low and steam for 30-40 minutes until rice is tender and the water is fully absorbed.\n7. Fluff the rice with a fork, mix in the remaining diced onion, and serve hot."
   },
   {
     "id": 2,
     "title": "Fufu and Light Soup",
     "summary": "Soft, pounded cassava and plantain (Fufu) served with a light, spicy, tomato-based broth (Light Soup) and your choice of meat or fish.",
-    "image": "/images/fufu-goat.jpg"
+    "image": "/images/fufu-goat.jpg",
+    "ingredients": "Fufu Mix (or Cassava & Plantain)\n1 lb Goat or Chicken (or other meat)\n4 large fresh tomatoes\n1 large onion\n2 Scotch Bonnet peppers\nGinger, 1-inch piece\nSalt, to taste\nWater",
+    "steps": "1. Wash and season the meat with salt, chopped onion, and ginger. Cook until tender, setting aside the stock.\n2. Blend the fresh tomatoes, remaining onion, and peppers until smooth.\n3. Add the blended mixture to the meat stock and bring to a boil. Simmer for 20 minutes.\n4. Add the cooked meat back to the soup and simmer for another 10 minutes, adjusting salt if needed.\n5. Prepare the Fufu: If using a mix, follow package instructions. If using fresh ingredients, boil and then pound the cassava and plantain into a smooth, stretchy dough.\n6. Serve the warm Fufu alongside a ladle of the Light Soup with pieces of meat."
   },
   {
     "id": 3,
     "title": "Waakye",
     "summary": "A beloved street food made from rice and black-eyed peas, cooked together with sorghum leaves to give it a distinct reddish-brown colour.",
-    "image": "/images/waakye.jpeg"
+    "image": "/images/waakye.jpeg",
+    "ingredients": "1 cup Black-Eyed Peas (or cowpeas)\n2 cups Rice\nDried Sorghum Leaves (waakye leaves), optional for color\nSalt, to taste\nWater",
+    "steps": "1. Wash the black-eyed peas and soak them for at least 30 minutes.\n2. Boil the soaked peas in water until partially soft (about 30 minutes). Add the sorghum leaves (tied in a bundle) for color.\n3. Wash the rice and add it to the boiling peas and water. The water level should be about an inch above the rice/pea mixture.\n4. Add salt to taste. Stir once, cover, and cook on medium heat until the water is absorbed.\n5. Lower the heat and allow the mixture to steam gently for another 15 minutes until the rice is fully tender. Remove the sorghum leaves.\n6. Serve with a side of Shito (hot pepper sauce), stew, and gari (toasted corn flour)."
   },
   {
     "id": 4,
     "title": "Red Red (Beans and Plantain)",
     "summary": "Stewed black-eyed peas cooked in palm oil, tomato, and spices, served hot with crispy fried ripe plantain slices (Kelewele).",
-    "image": "/images/gob3.jpeg"
+    "image": "/images/gob3.jpeg",
+    "ingredients": "2 cups Black-Eyed Peas\n2 Ripe Plantains\n1 large onion, chopped\n1/2 cup Palm Oil\n1/4 cup Tomato Paste\n2 Scotch Bonnet peppers, chopped\nSalt and seasoning cube (optional)",
+    "steps": "1. Boil the black-eyed peas until soft and set aside.\n2. Slice the ripe plantains and fry them in vegetable oil until golden brown. Set aside (this is the Kelewele).\n3. In a separate pot, heat the palm oil. Sauté the chopped onion until soft.\n4. Add the tomato paste and chopped peppers, stirring constantly for 5-7 minutes.\n5. Add a little water or stock, salt, and seasoning cube. Simmer until the sauce thickens.\n6. Pour the cooked beans into the sauce and stir gently to combine. Simmer for 10 minutes.\n7. Serve the Red Red (beans stew) hot with the crispy fried plantains."
   },
   {
     "id": 5,
     "title": "Groundnut Soup",
     "summary": "A thick, creamy, and savory soup made from ground peanuts, tomatoes, onions, and various spices, commonly paired with Omo Tuo or Fufu.",
-    "image": "/images/Groundnut-soup.jpg"
+    "image": "/images/Groundnut-soup.jpg",
+    "ingredients": "1.5 cups natural Peanut Butter (smooth or crunchy)\n1 lb Meat (chicken, beef, or fish)\n4 large fresh tomatoes, blended\n1 large onion, blended\n2 Scotch Bonnet peppers, blended\n1 thumb ginger, blended\nSalt and seasoning to taste",
+    "steps": "1. Wash and season the meat. Cook the meat with chopped onion, ginger, and salt until tender, reserving the stock.\n2. Blend the fresh tomatoes, onion, and peppers until smooth.\n3. In a large pot, combine the meat stock and the blended vegetable mixture. Bring to a boil.\n4. Slowly stir the peanut butter into the boiling mixture until it dissolves completely and the soup starts to thicken.\n5. Reduce heat and let the soup simmer, stirring occasionally to prevent the peanut butter from settling, for at least 45 minutes.\n6. Add the cooked meat and adjust seasoning. Simmer for a final 10 minutes until the oil surfaces slightly.\n7. Serve hot with Fufu or Omo Tuo (rice balls)."
   },
   {
     "id": 6,
     "title": "Banku and Tilapia",
     "summary": "Fermented corn and cassava dough (Banku) formed into balls, typically served with grilled Tilapia fish and a spicy blended pepper sauce (Shito).",
-    "image": "/images/banku and tilapia.jpg"
+    "image": "/images/banku and tilapia.jpg",
+    "ingredients": "1 cup Corn Dough (fermented)\n1 cup Cassava Dough (fermented)\nWhole Tilapia fish\nLemon juice, salt, and pepper for seasoning fish\nShito (Black Pepper Sauce) for serving",
+    "steps": "1. Preparing the Banku: Mix the corn and cassava doughs with water until smooth. Cook the mixture over medium heat, stirring vigorously with a wooden spoon until it thickens into a solid, smooth ball.\n2. Scoop and mold the hot Banku into individual serving balls and wrap in cling film or leaves.\n3. Preparing the Tilapia: Clean the fish, score the sides, and rub with a paste of lemon juice, ginger, salt, and pepper.\n4. Grill or roast the Tilapia until fully cooked and smoky. Alternatively, you can fry it.\n5. Serve the warm Banku balls with the grilled Tilapia and a generous side of Shito."
   },
   {
     "id": 7,
     "title": "Kontomire Stew (Palava Sauce)",
     "summary": "A richly flavored stew made from Taro leaves (kontomire), palm oil, smoked fish, and boiled eggs, often eaten with boiled yams or rice.",
-    "image": "/images/kontomire stew.jpg"
+    "image": "/images/kontomire stew.jpg",
+    "ingredients": "2 packs Frozen Kontomire (Taro Leaves)\n1/2 cup Palm Oil\n1 large onion, chopped\nSmoked fish (mackerel or herring), deboned\nAssorted meat (optional)\n4 Boiled Eggs\n1/4 cup Agushie (melon seeds), ground (optional)\nSalt and seasoning cube",
+    "steps": "1. Boil the kontomire leaves until soft, squeeze out the water, and chop coarsely. Boil and peel the eggs.\n2. Heat the palm oil until slightly smoking (do not bleach). Add chopped onions and sauté until translucent.\n3. Add the smoked fish and any pre-cooked meat. Stir and fry gently for 5 minutes.\n4. Stir in the ground *Agushie* (if using) and a little water to form a sauce.\n5. Add the chopped kontomire leaves, salt, and seasoning cube. Stir well.\n6. Reduce heat and simmer for 15 minutes until the stew is rich and thickened.\n7. Add the boiled eggs just before serving. Serve hot with boiled yam, plantain, or rice."
   },
   {
     "id": 8,
     "title": "Kenkey (Ga/Fante)",
     "summary": "Solid balls of fermented corn dough, steamed and wrapped in corn husks or plantain leaves, typically served with Shito (hot sauce) and fried fish.",
-    "image": "/images/kenkey.jpg"
+    "image": "/images/kenkey.jpg",
+    "ingredients": "1 kg Fermented Corn Dough (Ga or Fante style)\nWater\nCorn Husks or Plantain Leaves\nFried fish or meat for serving\nShito (hot pepper sauce) for serving",
+    "steps": "1. Preparing the Dough: Divide the fermented corn dough into two portions. Add water to one portion to form a slurry.\n2. Cooking the Ata (cooked paste): Bring the slurry to a boil and cook, stirring constantly until it forms a smooth, thick paste (the Ata).\n3. Mixing: Remove the Ata from heat and mix it with the uncooked portion of the dough until evenly combined.\n4. Wrapping: Scoop portions of the mixed dough onto corn husks or plantain leaves and wrap tightly into round balls.\n5. Steaming: Steam the wrapped Kenkey balls in a pot of boiling water for 1.5 to 2 hours until they are solid and fully cooked.\n6. Serve warm with fried fish, fried meat, and a generous spoon of Shito."
   }
 ]
