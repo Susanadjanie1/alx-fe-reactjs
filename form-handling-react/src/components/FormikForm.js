@@ -22,7 +22,7 @@ const FormikForm = () => {
     const [submissionMessage, setSubmissionMessage] = useState('');
 
     const mockApiSubmit = async (values, actions) => {
-        // Simulate a network delay
+
         await new Promise((resolve) => setTimeout(resolve, 1000));
         
         console.log('Formik Form Data Submitted:', values);
