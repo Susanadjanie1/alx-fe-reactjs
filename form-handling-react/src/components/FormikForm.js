@@ -18,7 +18,7 @@ const RegistrationSchema = Yup.object().shape({
     .required('Password is required'), 
 });
 
-const FormikForm = () => {
+const formikForm = () => {
     const [submissionMessage, setSubmissionMessage] = useState('');
 
     const mockApiSubmit = async (values, actions) => {
@@ -73,4 +73,4 @@ const FormikForm = () => {
     );
 };
 
-export default FormikForm;
+export default formikForm;
