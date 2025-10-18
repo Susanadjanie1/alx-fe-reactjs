@@ -1,5 +1,8 @@
+import React from 'react';
 import RegistrationForm from './components/RegistrationForm';
 import FormikForm from './components/FormikForm';
+
+
 
 function App() {
   return (
@@ -13,3 +16,6 @@ function App() {
 }
 
 export default App;
+
+
+
