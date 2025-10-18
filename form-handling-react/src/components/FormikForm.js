@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup'; 
+import * as Yup from 'yup';
 
 // Define the validation schema using Yup
 const RegistrationSchema = Yup.object().shape({
@@ -15,25 +15,22 @@ const RegistrationSchema = Yup.object().shape({
 
   password: Yup.string()
     .min(6, 'Password must be at least 6 characters')
-    .required('Password is required'),
+    .required('Password is required'), 
 });
 
 const FormikForm = () => {
     const [submissionMessage, setSubmissionMessage] = useState('');
 
-    // Function to simulate API call
     const mockApiSubmit = async (values, actions) => {
         // Simulate a network delay
         await new Promise((resolve) => setTimeout(resolve, 1000));
         
         console.log('Formik Form Data Submitted:', values);
         
-        // Simulate successful registration
         setSubmissionMessage('Registration successful with Formik! (Data logged to console)');
         
-        // Reset the form and set submission status
         actions.resetForm();
-        actions.setSubmitting(false); 
+        actions.setSubmitting(false);
     };
 
     return (
@@ -45,13 +42,10 @@ const FormikForm = () => {
                 onSubmit={mockApiSubmit}
             >
                 {({ isSubmitting }) => (
-                    // Formik's <Form> handles the onSubmit binding
                     <Form>
                         <div>
                             <label htmlFor="username">Username:</label>
-                           
                             <Field name="username" type="text" />
-                         
                             <ErrorMessage name="username" component="div" style={{ color: 'red' }} />
                         </div>
 
@@ -67,7 +61,6 @@ const FormikForm = () => {
                             <ErrorMessage name="password" component="div" style={{ color: 'red' }} />
                         </div>
 
-                        {/* Display Success Message */}
                         {submissionMessage && <p style={{ color: 'green' }}>{submissionMessage}</p>}
 
                         <button type="submit" disabled={isSubmitting}>
